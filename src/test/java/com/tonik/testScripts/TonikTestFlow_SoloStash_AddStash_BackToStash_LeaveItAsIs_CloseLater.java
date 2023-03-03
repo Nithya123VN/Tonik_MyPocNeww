@@ -13,7 +13,7 @@ public class TonikTestFlow_SoloStash_AddStash_BackToStash_LeaveItAsIs_CloseLater
 	@Test(priority = 0)
 	@Parameters({"targetAmount"})
     public void createStash(String targetAmount) throws Exception {
-		//welcomePage.RingPayAppLaunch();
+		
 		loginPage.performLogin();
 		tonikAccountBalance = mainPage.getTonikAccounBalance();
 		System.out.println("Balance:"+tonikAccountBalance);
@@ -30,69 +30,73 @@ public class TonikTestFlow_SoloStash_AddStash_BackToStash_LeaveItAsIs_CloseLater
 	}
 
 	@Test(priority = 1)
-	@Parameters({"stashAmount"})
-	public void addToStash(String stashAmount) throws Exception {
+	@Parameters({"stashAmount", "AchievedAmount"})
+	public void addToStash(String stashAmount,String AchievedAmount) throws Exception {
 		// Nithya
 		stashHomePage.clickAddToStash();
 		stashAddToStashPage.addToStash("500");
 		stashConfirmTransferToStashPage.confirmTransferToStash(stashAmount, prop.getproperty("mainAccount"),prop.getproperty("educationStash"),prop.getproperty("ownerStash"));
         stashMoneyStashPage.moneyStashed();
-        stashHomePage.verifyStashAchieved("₱500.00", "₱1,000.00");
+        stashHomePage.verifyStashAchieved(stashAmount, AchievedAmount);
 		ExtentReporter.jiraID = "TON-3";
 	}
 	
 	@Test(priority = 2)
-	public void addToStashAgain() throws Exception {
+	@Parameters({"AddToStashFund","stashAmount","AchievedAmount","AddOrSubstractTonikAmount"})
+	public void addToStashAgain(String AddToStashFund,String stashAmount,String AchievedAmount ,String AddOrSubstractTonikAmount) throws Exception {
 		// Nithya
 		stashHomePage.clickAddToStash();
-		stashAddToStashPage.addToStash("500");
-		stashConfirmTransferToStashPage.confirmTransferToStash("₱500.00", prop.getproperty("mainAccount"),prop.getproperty("educationStash"),prop.getproperty("ownerStash"));
+		stashAddToStashPage.addToStash(AddToStashFund);
+		stashConfirmTransferToStashPage.confirmTransferToStash(stashAmount, prop.getproperty("mainAccount"),prop.getproperty("educationStash"),prop.getproperty("ownerStash"));
         stashMoneyStashPage.moneyStashed();
-        stashHomePage.verifyStashAchieved("₱1,000.00", "₱1,000.00");
+        stashHomePage.verifyStashAchieved(AchievedAmount, AchievedAmount);
         stashHomePage.verifyGoalAchieved();
         basePage.moveToPreviousPage(1);
-	    tonikAccountBalance = Utilities.subtractTwoAmount(tonikAccountBalance, "1000.00");
+	    tonikAccountBalance = Utilities.subtractTwoAmount(tonikAccountBalance, AddOrSubstractTonikAmount);
 	    System.out.println(tonikAccountBalance);
 		mainPage.clickTotalStashBalance();
 		ExtentReporter.jiraID = "TON-3";
 	}
 	
 	@Test(priority = 3)
-	public void backTostash() throws Exception
+	@Parameters({"AchievedAmount"})
+	public void backTostash(String AchievedAmount) throws Exception
 	{
 		stashHomePage.clickStash();
-		stashCongratsGoalAchievedPage.verifyCongratsGoalAchieved("₱1,000.00", "₱1,000.00", prop.getproperty("rateofInterest"), prop.getproperty("taxWithholding"));
+		stashCongratsGoalAchievedPage.verifyCongratsGoalAchieved(AchievedAmount, AchievedAmount, prop.getproperty("rateofInterest"), prop.getproperty("taxWithholding"));
 		stashCongratsGoalAchievedPage.verifynextsteps();
 		stashCongratsGoalAchievedPage.clickBackToStash();
-		stashAchievedPage.verifyAchievedStashMessage("₱1,000.00", "₱1,000.00");
+		stashAchievedPage.verifyAchievedStashMessage(AchievedAmount, AchievedAmount);
 		basePage.moveToPreviousPage(1);
 		ExtentReporter.jiraID = "TON-16";
 	}
 	
 	
 	@Test(priority = 4)
-	public void LeaveItAsIs() throws Exception {
+	@Parameters({"AchievedAmount"})
+	public void LeaveItAsIs(String AchievedAmount) throws Exception {
 		stashHomePage.clickStash();
-		stashCongratsGoalAchievedPage.verifyCongratsGoalAchieved("₱1,000.00", "₱1,000.00", prop.getproperty("rateofInterest"), prop.getproperty("taxWithholding"));
+		stashCongratsGoalAchievedPage.verifyCongratsGoalAchieved(AchievedAmount, AchievedAmount, prop.getproperty("rateofInterest"), prop.getproperty("taxWithholding"));
 		stashCongratsGoalAchievedPage.clickConvertToTimeDeposit();
 		stashCongratsGoalAchievedPage.verifyConvertToTimeDeposit();
 		stashCongratsGoalAchievedPage.clickLeaveItAsIs();		
-		stashAchievedPage.verifyAchievedStashMessage("₱1,000.00", "₱1,000.00");
+		stashAchievedPage.verifyAchievedStashMessage(AchievedAmount, AchievedAmount);
 		basePage.moveToPreviousPage(1);
 		ExtentReporter.jiraID = "TON-16";
     
 	}
     
 	@Test(priority = 5)
-	public void closeLater() throws Exception {
+	@Parameters({"AchievedAmount","AddOrSubstractTonikAmount"})
+	public void closeLater(String AchievedAmount, String AddOrSubstractTonikAmount) throws Exception {
 		stashHomePage.clickStash();
-		stashCongratsGoalAchievedPage.verifyCongratsGoalAchieved("₱1,000.00", "₱1,000.00", prop.getproperty("rateofInterest"), prop.getproperty("taxWithholding"));
+		stashCongratsGoalAchievedPage.verifyCongratsGoalAchieved(AchievedAmount, AchievedAmount, prop.getproperty("rateofInterest"), prop.getproperty("taxWithholding"));
 		stashCongratsGoalAchievedPage.clickConvertToTimeDeposit();
 		stashCongratsGoalAchievedPage.clickCloseStash();
 		stashYouBrokeTheStashPage.clickLater();
 		//stashAchievedPage.getAllWebElements();
 		basePage.moveToPreviousPage(2);
-		String newBalance = Utilities.addTwoAmount(tonikAccountBalance, "1000.00");
+		String newBalance = Utilities.addTwoAmount(tonikAccountBalance, AddOrSubstractTonikAmount);
 		//System.out.println("Balance:"+newBalance);
 		mainPage.verifyTonikAccountBalance(newBalance);
 		ExtentReporter.jiraID = "TON-16";

@@ -15,12 +15,12 @@ public class WelcomePage extends BasePage {
     }
 
     /**
-     * Business method for RingPay Application Launch
+     * Business method for Tonik
      *
      */
 
-    public void WelcomeRingPayAppLaunch() throws Exception {
-        extent.HeaderChildNode("RingPay App Launch");
+    public void WelcomeTonikAppLaunch() throws Exception {
+        extent.HeaderChildNode("Tonik");
 
         explicitWaitVisibility(WelcomeSelectors.txtWelcomeToTonix,60);
         if(verifyElementPresent(WelcomeSelectors.txtWelcomeToTonix, "Welcome to Tonik, the first neobank in the Philippines.")) {
